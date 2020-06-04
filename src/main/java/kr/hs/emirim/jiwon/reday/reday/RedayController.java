@@ -62,7 +62,8 @@ public class RedayController {
 	public String createArticle(@PathVariable String username,
 			@RequestParam("title") String title,
 			@RequestParam("contents") String contents,
-			@RequestParam("file") MultipartFile file) throws IOException {
+			@RequestParam("file") MultipartFile file,
+			@RequestParam("country") String country) throws IOException {
 		User user = userRepository.findByUserName(username);
 		
 		String fileName = (new Date()).getTime() + "_" + username + "_" +file.getOriginalFilename();
@@ -82,7 +83,7 @@ public class RedayController {
 		bis.close();
 		
 		// DB에 저장.
-		Article article = new Article(title, contents, 0);
+		Article article = new Article(title, contents, 0, country);
 		article.setFileLocation("uploads/"+ username + "/" + fileName);
 		article.setUser(user);
 		articleRepository.save(article);

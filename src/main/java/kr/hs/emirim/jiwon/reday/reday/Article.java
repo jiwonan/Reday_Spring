@@ -32,6 +32,7 @@ public class Article {
 	@NonNull private String title;
 	@NonNull private String contents;
 	@NonNull private Integer heart;
+	@NonNull private String country;
 	private String fileLocation;
 	
 	@ManyToOne

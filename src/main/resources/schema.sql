@@ -17,6 +17,7 @@ CREATE TABLE article (
 	heart int(11),
 	file_location varchar(255),
 	user_id bigint(20) NOT NULL,
+	country varchar(255) NOT NULL,
 	FOREIGN KEY (user_id) REFERENCES user (id)
        ON DELETE CASCADE
        ON UPDATE CASCADE
