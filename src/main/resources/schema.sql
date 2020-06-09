@@ -1,6 +1,11 @@
 DROP TABLE IF EXISTS article;
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS country;
+DROP TABLE IF EXISTS countries;
+
+CREATE TABLE countries (
+	id bigint(20) PRIMARY KEY AUTO_INCREMENT,
+	country varchar(255) NOT NULL
+);
 
 CREATE TABLE user (
 	id bigint(20) PRIMARY KEY AUTO_INCREMENT,
@@ -17,13 +22,11 @@ CREATE TABLE article (
 	heart int(11),
 	file_location varchar(255),
 	user_id bigint(20) NOT NULL,
-	country varchar(255) NOT NULL,
+	country_id bigint(20) NOT NULL,
 	FOREIGN KEY (user_id) REFERENCES user (id)
+       ON DELETE CASCADE
+       ON UPDATE CASCADE,
+    FOREIGN KEY (country_id) REFERENCES countries (id)
        ON DELETE CASCADE
        ON UPDATE CASCADE
 );
-
---CREATE TABLE countries (
---	id bigint(20) PRIMARY KEY AUTO_INCREMENT,
---	country varchar(255) NOT NULL
---)

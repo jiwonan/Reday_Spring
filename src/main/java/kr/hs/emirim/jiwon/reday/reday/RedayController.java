@@ -24,6 +24,7 @@ public class RedayController {
 	
 	@Autowired private ArticleRepository articleRepository;  
 	@Autowired private UserRepository userRepository;
+	@Autowired private CountriesRepository countriesRepository;
 	
 	@GetMapping(value="/test", produces=MediaType.APPLICATION_JSON_VALUE)
 	public String testAd() {
@@ -48,6 +49,15 @@ public class RedayController {
 	    public Iterable<Article> readArticlesDataAll() {
 			return articleRepository.findAll();
 	    }
+		
+	//한 나라의 게시글을 모두 가져옴
+	/*@GetMapping(value="{country}/articles", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Iterable<Article> readCountryArticlesDataAll(@PathVariable String country) {
+		Countries countries = countriesRepository.findByCountry(country);
+		
+		return countries.getArticles();
+	}*/
+		
 	/*
 	// get user_name
 	@GetMapping(value="{email}/getusername", produces=MediaType.TEXT_PLAIN_VALUE)
@@ -57,14 +67,16 @@ public class RedayController {
 		return user.getUserName();
 	}
 	*/
+		
 	// 글쓰기.
-	@PostMapping(value="{username}/articles", produces=MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value="/{username}/articles/{country}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public String createArticle(@PathVariable String username,
 			@RequestParam("title") String title,
 			@RequestParam("contents") String contents,
 			@RequestParam("file") MultipartFile file,
-			@RequestParam("country") String country) throws IOException {
+			@PathVariable String country) throws IOException {
 		User user = userRepository.findByUserName(username);
+		Countries countries = countriesRepository.findByCountry(country);
 		
 		String fileName = (new Date()).getTime() + "_" + username + "_" +file.getOriginalFilename();
 		
@@ -83,9 +95,10 @@ public class RedayController {
 		bis.close();
 		
 		// DB에 저장.
-		Article article = new Article(title, contents, 0, country);
+		Article article = new Article(title, contents, 0);
 		article.setFileLocation("uploads/"+ username + "/" + fileName);
 		article.setUser(user);
+		article.setCountries(countries);
 		articleRepository.save(article);
 		
 		return "true";

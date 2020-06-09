@@ -32,7 +32,7 @@ public class Article {
 	@NonNull private String title;
 	@NonNull private String contents;
 	@NonNull private Integer heart;
-	@NonNull private String country;
+	// @NonNull private String country;
 	private String fileLocation;
 	
 	@ManyToOne
@@ -40,8 +40,8 @@ public class Article {
 	@JsonIgnore
 	private User user;
 	
-//	@ManyToOne
-//	@JoinColumn(name="country_id")
-//	@JsonIgnore
-//	private Countries country;
+	@ManyToOne
+	@JoinColumn(name="country_id")
+	@JsonIgnore
+	private Countries countries;
 }
