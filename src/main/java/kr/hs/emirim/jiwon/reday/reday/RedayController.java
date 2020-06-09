@@ -45,18 +45,24 @@ public class RedayController {
     }
 	
 	// 모든 게시글을 가져옴.
-		@GetMapping(value="/articles", produces=MediaType.APPLICATION_JSON_VALUE)
-	    public Iterable<Article> readArticlesDataAll() {
-			return articleRepository.findAll();
-	    }
+	@GetMapping(value="/articles", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Iterable<Article> readArticlesDataAll() {
+		return articleRepository.findAll();
+	}
 		
+	// 모든 나라 불러옴.
+	@GetMapping(value="/all_countries", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Iterable<Countries> readCountriesDataAll() {
+		return countriesRepository.findAll();
+	}
+	
 	//한 나라의 게시글을 모두 가져옴
-	/*@GetMapping(value="{country}/articles", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="{country}/articles", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Iterable<Article> readCountryArticlesDataAll(@PathVariable String country) {
 		Countries countries = countriesRepository.findByCountry(country);
 		
 		return countries.getArticles();
-	}*/
+	}
 		
 	/*
 	// get user_name
