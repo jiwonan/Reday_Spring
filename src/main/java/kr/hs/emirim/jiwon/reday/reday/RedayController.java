@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -37,7 +38,7 @@ public class RedayController {
 	}
 	
 	// 한 명의 유저가 쓴 게시글을 모두 가져옴.
-	@GetMapping(value="{username}/articles", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="{username}/userarticles", produces=MediaType.APPLICATION_JSON_VALUE)
     public Iterable<Article> readArticlesData(@PathVariable String username) {
 		User user = userRepository.findByUserName(username);
 		
@@ -57,11 +58,17 @@ public class RedayController {
 	}
 	
 	//한 나라의 게시글을 모두 가져옴
-	@GetMapping(value="{country}/articles", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/{country}/articles", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Iterable<Article> readCountryArticlesDataAll(@PathVariable String country) {
 		Countries countries = countriesRepository.findByCountry(country);
 		
 		return countries.getArticles();
+	}
+	
+	@GetMapping(value="/article/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Optional<Article> readHreatCount(@PathVariable Long id) {
+		Optional<Article> article = articleRepository.findById(id);
+		return article;
 	}
 		
 	/*
