@@ -32,15 +32,16 @@ public class RedayController {
 		return "{\"connect: \" success}";
 	}
 	
+	// 유저 정보 가져옴.
 	@GetMapping(value="/users/{email}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public User getUser(@PathVariable String email) {
 		return userRepository.findByEmail(email);
 	}
 	
 	// 한 명의 유저가 쓴 게시글을 모두 가져옴.
-	@GetMapping(value="{username}/userarticles", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Iterable<Article> readArticlesData(@PathVariable String username) {
-		User user = userRepository.findByUserName(username);
+	@GetMapping(value="{email}/articles", produces=MediaType.APPLICATION_JSON_VALUE)
+    public Iterable<Article> readArticlesData(@PathVariable String email) {
+		User user = userRepository.findByEmail(email);
 		
     	return user.getArticles();
     }
@@ -58,7 +59,7 @@ public class RedayController {
 	}
 	
 	//한 나라의 게시글을 모두 가져옴
-	@GetMapping(value="/{country}/articles", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/countries/{country}/articles", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Iterable<Article> readCountryArticlesDataAll(@PathVariable String country) {
 		Countries countries = countriesRepository.findByCountry(country);
 		
