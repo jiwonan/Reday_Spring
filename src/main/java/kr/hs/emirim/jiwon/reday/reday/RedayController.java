@@ -2,7 +2,9 @@ package kr.hs.emirim.jiwon.reday.reday;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,13 +12,18 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -116,6 +123,34 @@ public class RedayController {
 		articleRepository.save(article);
 		
 		return "true";
+	}
+	
+	// 이미지 불러오기.
+	@GetMapping(value = "/download/{username}/{filename}")
+	public HttpEntity<byte[]> download(@PathVariable String username,
+									   @PathVariable String filename, HttpServletResponse response) throws Exception {
+		File f = new File("uploads/"+username+"/"+ filename);
+
+		byte[] buffer = new byte[4096];
+		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		int bytes = 0;
+		while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
+			baos.write(buffer, 0, bytes);
+		}
+		bis.close();
+		baos.close();
+
+		// response.setHeader("Content-Type", "image/jpeg");
+		// response.setContentType("image/jpeg");
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "image/png");
+		// headers.add("Content-Type", "image/*");
+		// response.setHeader("Content-Disposition", "attachment; filename=" +
+		// filename);
+
+		return new HttpEntity<byte[]>(baos.toByteArray(), headers);
 	}
 	
 	// JoinIn
